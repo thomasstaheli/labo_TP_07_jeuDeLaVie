@@ -4,5 +4,4 @@ project(labo_TP_07_jeuDeLaVie)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(labo_TP_07_jeuDeLaVie main.cpp
-        programManager.cpp
         boardGame.cpp)

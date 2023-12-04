@@ -1,8 +1,30 @@
-//
-// Created by thoma on 01.12.2023.
-//
+#ifndef TABLEHANDLING
+#define TABLEHANDLING
 
-#ifndef LABO_TP_07_JEUDELAVIE__TABLEHANDLING_H_
-#define LABO_TP_07_JEUDELAVIE__TABLEHANDLING_H_
+#include <iomanip>
+#include <iostream>
 
-#endif //LABO_TP_07_JEUDELAVIE__TABLEHANDLING_H_
+
+
+template <typename T>
+void display2DTable(T &table, int spaceBetweenDisplay) {
+
+  const unsigned short IMPBRICKEDTABLESIZE = 0;
+
+  std::cout << std::setw(spaceBetweenDisplay) << "";
+  for (size_t col = 0; col < table.size(); ++col) {
+    std::cout << std::setw(spaceBetweenDisplay) << col;
+  }
+
+  std::cout << std::endl;
+  for (size_t row = 0; row < table[IMPBRICKEDTABLESIZE].size(); ++row) {
+    std::cout << std::setw(spaceBetweenDisplay) << row;
+    for (size_t col = 0; col < table.size(); ++col) {
+      std::cout << std::setw(spaceBetweenDisplay) << table[row][col] ;
+    }
+    std::cout << std::endl;
+  }
+}
+
+
+#endif

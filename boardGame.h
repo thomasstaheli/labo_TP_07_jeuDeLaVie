@@ -1,32 +1,48 @@
 #ifndef BOARDGAME
 #define BOARDGAME
 
-#include <span>
-#include <vector>
-#include <iomanip>
+
 #include <iostream>
 #include <string>
 
+const unsigned short ROW = 0;
 
-template <typename T>
-void display2DTable(T &table, int spaceBetweenDisplay) {
-  const unsigned short ROW = 0;
-  const unsigned short COL = 1;
 
-  std::cout << std::setw(spaceBetweenDisplay) << "";
-  for (size_t col = 0; col < table[COL].size(); ++col) {
-    std::cout << std::setw(spaceBetweenDisplay) << col;
-  }
-
-  std::cout << std::endl;
-  for (size_t row = 0; row < table[ROW].size(); ++row) {
-    std::cout << std::setw(spaceBetweenDisplay) << row;
-    for (size_t col = 0; col < table[COL].size(); ++col) {
-      std::cout << std::setw(spaceBetweenDisplay) << table[row][col] ;
+template <typename T ,typename AliveCellType>
+int countLiveNeighbors(T& actualBoard, std::size_t row, std::size_t col,AliveCellType aliveCell){
+  int aliveNeighbors = 0;
+  for (int rowNextToCell = -1; rowNextToCell <= 1; ++rowNextToCell) {
+    for (int colNextToCell = -1; colNextToCell <= 1; ++colNextToCell) {
+      if ( row + size_t(rowNextToCell) < actualBoard.size()  && col + size_t(colNextToCell) < actualBoard[row].size()) {
+        aliveNeighbors += (actualBoard[row + size_t(rowNextToCell)][col + size_t(colNextToCell)] == aliveCell) ? 1 : 0;
+      }
     }
-    std::cout << std::endl;
   }
+
+  return aliveNeighbors;
 }
+
+
+template <typename T ,typename AliveCellType,typename DeadCellType>
+void updateBoard(T& actualBoard, AliveCellType aliveCell, DeadCellType deadCell) {
+  T newBoard = actualBoard;
+  for (size_t row = 0; row < actualBoard[ROW].size(); ++row) {
+    for (size_t col = 0; col < actualBoard.size(); ++col) {
+      int liveNeighbors = countLiveNeighbors(actualBoard, row, col,aliveCell) - ((actualBoard[row][col] == aliveCell) ? 1:0);
+
+      if (actualBoard[row][col] == aliveCell) {
+        newBoard[row][col] = (liveNeighbors < 2 || liveNeighbors > 3) ? deadCell : aliveCell;
+      } else {
+        newBoard[row][col] = (liveNeighbors == 3) ? aliveCell : deadCell;
+      }
+    }
+  }
+
+  actualBoard = newBoard;
+}
+
+
+
 
 
 

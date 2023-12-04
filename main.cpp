@@ -3,6 +3,7 @@
 #include <array>
 #include <thread>
 #include "boardGame.h"
+#include "tableHandling.h"
 
 #ifdef _WIN32
 #define CLEARTERMINAL system("CLS");
@@ -14,7 +15,7 @@ using namespace std;
 
 const int TABLEROW = 9;
 const int TABLECOL = 9;
-const int  MAXGAMEGENERATION = 5;
+const int  MAXGAMEGENERATION = 10;
 
 const int  SLEEPTIMEMS = 500;
 
@@ -27,7 +28,7 @@ using Board = array<array<char, TABLECOL>, TABLEROW>;
 
 
 
-const int    NUMMBERLINESEPARATOR        = 30;
+const int    NUMMBERLINESEPARATOR        = SPACINGFORCASE * (TABLEROW+1);
 const string TABLEGENERATIONBORDEUR(size_t(NUMMBERLINESEPARATOR), '-');
 const string TITLEGENERARTION       = "GENRATION NO ";
 
@@ -46,39 +47,9 @@ void displayTitleWithSeparation(const string& text, int numberLineSeparator, con
 }
 
 
-int countLiveNeighbors(const Board &board, size_t row, size_t col) {
-  int aliveNeighbors = 0;
-  for (int rowNextToCell = -1; rowNextToCell <= 1; ++rowNextToCell) {
-    for (int colNextToCell = -1; colNextToCell <= 1; ++colNextToCell) {
-      if (rowNextToCell == 0 && colNextToCell == 0) {
-        continue;
-      }
-      if ( row + size_t(rowNextToCell) < board.size()  && col + size_t(colNextToCell) < board[row].size()) {
-        aliveNeighbors += (board[row + size_t(rowNextToCell)][col + size_t(colNextToCell)] == ALIVECELL) ? 1 : 0;
-      }
-    }
-  }
 
-  return aliveNeighbors;
-}
 
-void updateBoard(Board &actualBoard) {
-  Board newBoard = actualBoard;
-  // Faire une fonction pour lire un tableau ? Generique ?
-  for (size_t row = 0; row < TABLEROW; ++row) {
-    for (size_t col = 0; col < TABLECOL; ++col) {
-      const int liveNeighbors = countLiveNeighbors(actualBoard, row, col);
 
-      if (actualBoard[row][col] == ALIVECELL) {
-        newBoard[row][col] = (liveNeighbors < 2 || liveNeighbors > 3) ? DEADCELL : ALIVECELL;
-      } else {
-        newBoard[row][col] = (liveNeighbors == 3) ? ALIVECELL : DEADCELL;
-      }
-    }
-  }
-
-  actualBoard = newBoard;
-}
 
 
 int main() {
@@ -102,7 +73,7 @@ int main() {
     displayTitleWithSeparation(TITLEGENERARTION,NUMMBERLINESEPARATOR,TABLEGENERATIONBORDEUR);
     display2DTable(actualBoard, SPACINGFORCASE);
     oldBoard = actualBoard;
-    updateBoard(actualBoard);
+    updateBoard(actualBoard,ALIVECELL,DEADCELL);
 
     // Changement afin d'éviter un fichier
     this_thread::sleep_for(chrono::milliseconds(SLEEPTIMEMS));
@@ -112,7 +83,7 @@ int main() {
 
   }
   // Ajout de l'attente que l'utilisateur appuisse sur enter pour terminer le programme
-  cout << endl << "Presse [enter] to finish ...";
+  cout << endl << "Press any key to finish ...";
   cin.get();
   return EXIT_SUCCESS;
 }

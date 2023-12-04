@@ -4,20 +4,16 @@
 const unsigned short ROW = 0;
 
 template <typename T, typename AliveCellType,typename DeadCellType>
-T initializeBoard(T& table, AliveCellType aliveCell, DeadCellType deadCell) {
+void initializeBoard(T& table, AliveCellType aliveCell, DeadCellType deadCell) {
   const int ALIVECELL=1;
 
 
   for (size_t row = 0; row < table[ROW].size(); ++row) {
     for (size_t col = 0; col < table.size(); ++col) {
-      if (table[row][col] == ALIVECELL) {
-        table[row][col] = aliveCell;
-      } else {
-        table[row][col] = deadCell;
-      }
+      table[row][col] = table[row][col]==ALIVECELL ? aliveCell:deadCell;
     }
   }
-  return table;
+
 }
 
 

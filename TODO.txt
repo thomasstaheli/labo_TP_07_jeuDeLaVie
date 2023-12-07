@@ -1,4 +1,0 @@
-TODO : 
--Verfier les librairies 
--Verfier le code qui était push
--Mettre au propre noms des variables et code
